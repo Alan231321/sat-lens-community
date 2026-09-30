@@ -15,14 +15,36 @@
 
 ---
 
-## 怎么发布到 GitHub Pages
+## 已经发布好了（2026-09-30）
 
-### 方式 0：一条命令（推荐 —— 建仓库 + 传文件 + 开 Pages 全自动）
+| 东西 | 地址 |
+| --- | --- |
+| 社区页（可对外发链接） | https://alan231321.github.io/sat-lens-community/ |
+| **群二维码图片（换的就是它）** | https://alan231321.github.io/sat-lens-community/group_qr.jpg |
+| CDN 镜像（国内兜底，扩展里配的第二条） | https://cdn.jsdelivr.net/gh/Alan231321/sat-lens-community@main/group_qr.jpg |
+| 仓库 | https://github.com/Alan231321/sat-lens-community |
+
+站点源：仓库的 `main` 分支根目录（Deploy from a branch）。改哪个文件、网站就跟着变，无需任何构建。
+
+### 换二维码：三种做法（都不碰扩展）
+
+1. **GitHub 网页（最快）**：打开仓库 → Add file → Upload files → 把新图拖进去（同名 `group_qr.jpg` 覆盖）→ Commit changes。约 30 秒。
+2. **本地脚本**：`node scripts/gh-pages-setup.mjs --qr 新的二维码.jpg`（需要 `.gh_token`）。
+3. **交给 AI**：把新图放到工作区里说一声即可。
+
+> 扩展侧是 `fetch(..., { cache: 'no-store' })`，所以**用户刷新二维码页就是新图**（Pages 那 10 分钟缓存被绕开了）。
+> jsDelivr 镜像的边缘缓存是 12 小时，只有主源（github.io）被墙时才会用到它。
+
+---
+
+## 怎么发布到 GitHub Pages（本文件是原始说明，实际已经按方式 0 发完了）
+
+### 方式 0：一条命令（建仓库 + 传文件 + 开 Pages 全自动）
 
 ```bash
-# 1) 建一个 Fine-grained token（只勾这个仓库，7 天有效期就够）：
+# 1) 建一个 Fine-grained token（建议只勾这一个仓库）
 #    https://github.com/settings/personal-access-tokens/new
-#    Permissions: Contents 读写 + Pages 读写 + Administration 读写（要脚本帮你建仓库才需要它）
+#    Permissions: Contents 读写 + Pages 读写（要脚本帮建仓库才需要 Administration 读写）
 # 2) 把 token 写进仓库根目录的 .gh_token（已在 .gitignore 里，不会被提交）
 # 3) 跑：
 node scripts/gh-pages-setup.mjs                 # 首次：建仓库 + 发布 + 开 Pages，最后打印地址
@@ -30,7 +52,7 @@ node scripts/gh-pages-setup.mjs --dry-run       # 只看计划，不联网写任
 node scripts/gh-pages-setup.mjs --qr 新码.jpg    # 以后：只换二维码图片
 ```
 
-脚本从不打印 token，只放进 Authorization 头；跑完可以立刻去 GitHub 把 token 删掉。
+脚本从不打印 token，只放进 Authorization 头；token 两端的 `< >` 之类的复制噪声会自动剥掉。
 
 ### 方式 A：本仓库直接发（已配好 workflow）
 
